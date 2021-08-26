@@ -4,21 +4,23 @@ from operator import itemgetter
 
 ROW_TEMPLATE = "{:<30} | {:>2} | {:>2} | {:>2} | {:>2} | {:>2}"
 
+HEADER_ROW = ("Team", "MP", "W", "D", "L", "P")
+
 WIN = "win"
 DRAW = "draw"
 LOSS = "loss"
-
-RESULT_TO_OTHER_RESULT = {
-    WIN: LOSS,
-    DRAW: DRAW,
-    LOSS: WIN
-}
 
 WIN_POINTS = 3
 DRAW_POINTS = 1
 LOSS_POINTS = 0
 
 def tally(rows: List[str]) -> List[str]:
+    RESULT_TO_OTHER_RESULT = {
+        WIN: LOSS,
+        DRAW: DRAW,
+        LOSS: WIN
+    }
+    
     teams = defaultdict(Counter)
     for row in rows:
         team, other, result = row.split(";")
@@ -35,5 +37,5 @@ def tally(rows: List[str]) -> List[str]:
     # Sort by points (last tuple value), assumes stable sort!
     table.sort(key=itemgetter(-1), reverse=True)
     
-    table.insert(0, ("Team", "MP", "W", "D", "L", "P"))
+    table.insert(0, HEADER_ROW)
     return [ROW_TEMPLATE.format(*row) for row in table]
